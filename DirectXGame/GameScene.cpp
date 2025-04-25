@@ -42,10 +42,10 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 	// ブロックの更新
 	for (WorldTransform* worldTransformBlock : worldTransformBlocks_) {
-		worldTransformBlock->scale_;
+		Matrix4x4 resultScale = MakeScaleMatrix(Vector3{worldTransformBlock->scale_});
 		worldTransformBlock->rotation_;
 		worldTransformBlock->translation_;
-		worldTransformBlock->matWorld_;
+		worldTransformBlock->matWorld_ = ;
 	}
 
 // 描画
