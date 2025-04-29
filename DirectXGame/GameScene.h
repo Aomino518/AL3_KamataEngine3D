@@ -20,10 +20,17 @@ private:
 	KamataEngine::Model* model_ = nullptr;
 
 	// ワールドトランスフォーム
-	std::vector<KamataEngine::WorldTransform*> worldTransformBlocks_;
+	std::vector<std::vector<KamataEngine::WorldTransform*>> worldTransformBlocks_;
 	// カメラ
 	KamataEngine::Camera camera_;
 
 	uint32_t textureHandle_ = 0;
+
+#ifdef _DEBUG
+	// デバッグカメラ有効
+	bool isDebugCameraActive_ = false;
+	// デバッグカメラ
+	DebugCamera* debugCamera_ = nullptr;
+#endif _DEBUG
 
 };
