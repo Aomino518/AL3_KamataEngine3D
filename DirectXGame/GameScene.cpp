@@ -35,21 +35,27 @@ void GameScene::Initialize() {
 	// カメラ
 	camera_.Initialize();
 
-	textureHandle_ = TextureManager::Load("cube/cube.png");
+	textureHandle_ = TextureManager::Load("cube/cube.jpg");
 }
 
 // 更新
 void GameScene::Update() {
 	// ブロックの更新
 	for (WorldTransform* worldTransformBlock : worldTransformBlocks_) {
-		Matrix4x4 resultScale = MakeScaleMatrix(Vector3{worldTransformBlock->scale_});
-		worldTransformBlock->rotation_;
-		worldTransformBlock->translation_;
-		worldTransformBlock->matWorld_ = ;
+		worldTransformBlock->matWorld_ = KamataEngine::MakeAffineMatrix(worldTransformBlock->scale_, worldTransformBlock->rotation_, worldTransformBlock->translation_);
+		// 定数バッファに転送する
+		worldTransformBlock->TransferMatrix();
 	}
+}
 
 // 描画
 void GameScene::Draw() { 
 	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
 
+	Model::PreDraw(dxCommon->GetCommandList());
+	for (WorldTransform* worldTransformBlock : worldTransformBlocks_) {
+		model_->Draw(*worldTransformBlock, camera_);
+	}
+	Model::PostDraw();
 }
+

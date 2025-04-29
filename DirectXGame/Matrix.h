@@ -1,14 +1,7 @@
 #pragma once
+#include <3d/WorldTransform.h>
 
 namespace KamataEngine {
-
-struct Matrix4x4 {
-	float m[4][4];
-};
-
-struct Vector3 {
-	float x, y, z;
-};
 
 // <summary>
 /// X軸回転行列関数
@@ -61,4 +54,5 @@ Matrix4x4 MakeScaleMatrix(const Vector3& scale);
 /// <param name="translate">平行移動行列</param>
 /// <returns></returns>
 Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate);
+
 }

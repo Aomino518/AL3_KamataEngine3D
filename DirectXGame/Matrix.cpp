@@ -1,9 +1,10 @@
 #include "Matrix.h"
 #include <cmath>
 
+namespace KamataEngine {
 // X軸回転行列
-KamataEngine::Matrix4x4 MakeRotateXMatrix(float radian) {
-	KamataEngine::Matrix4x4 result;
+Matrix4x4 MakeRotateXMatrix(float radian) {
+	Matrix4x4 result;
 	result.m[0][0] = 1.0f;
 	result.m[0][1] = 0.0f;
 	result.m[0][2] = 0.0f;
@@ -28,8 +29,8 @@ KamataEngine::Matrix4x4 MakeRotateXMatrix(float radian) {
 }
 
 // Y軸回転行列
-KamataEngine::Matrix4x4 MakeRotateYMatrix(float radian) {
-	KamataEngine::Matrix4x4 result;
+Matrix4x4 MakeRotateYMatrix(float radian) {
+	Matrix4x4 result;
 	result.m[0][0] = std::cos(radian);
 	result.m[0][1] = 0.0f;
 	result.m[0][2] = -std::sin(radian);
@@ -54,8 +55,8 @@ KamataEngine::Matrix4x4 MakeRotateYMatrix(float radian) {
 }
 
 // Z軸回転行列
-KamataEngine::Matrix4x4 MakeRotateZMatrix(float radian) {
-	KamataEngine::Matrix4x4 result;
+Matrix4x4 MakeRotateZMatrix(float radian) {
+	Matrix4x4 result;
 	result.m[0][0] = std::cos(radian);
 	result.m[0][1] = std::sin(radian);
 	result.m[0][2] = 0.0f;
@@ -80,8 +81,8 @@ KamataEngine::Matrix4x4 MakeRotateZMatrix(float radian) {
 }
 
 // 行列の積
-KamataEngine::Matrix4x4 Multiply(const KamataEngine::Matrix4x4& m1, const KamataEngine::Matrix4x4& m2) {
-	KamataEngine::Matrix4x4 result;
+Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2) {
+	Matrix4x4 result;
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 4; j++) {
 			result.m[j][i] = 0;
@@ -95,8 +96,8 @@ KamataEngine::Matrix4x4 Multiply(const KamataEngine::Matrix4x4& m1, const Kamata
 }
 
 // 平行移動行列
-KamataEngine::Matrix4x4 MakeTranslateMatrix(const KamataEngine::Vector3& translate) {
-	KamataEngine::Matrix4x4 result;
+Matrix4x4 MakeTranslateMatrix(const Vector3& translate) {
+	Matrix4x4 result;
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 4; j++) {
 			result.m[j][i] = 0.0f;
@@ -115,8 +116,8 @@ KamataEngine::Matrix4x4 MakeTranslateMatrix(const KamataEngine::Vector3& transla
 }
 
 // 拡大縮小行列
-KamataEngine::Matrix4x4 MakeScaleMatrix(const KamataEngine::Vector3& scale) {
-	KamataEngine::Matrix4x4 result;
+Matrix4x4 MakeScaleMatrix(const Vector3& scale) {
+	Matrix4x4 result;
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 4; j++) {
 			result.m[j][i] = 0.0f;
@@ -132,15 +133,17 @@ KamataEngine::Matrix4x4 MakeScaleMatrix(const KamataEngine::Vector3& scale) {
 }
 
 // 3次元アフィン変換行列
-KamataEngine::Matrix4x4 MakeAffineMatrix(const KamataEngine::Vector3& scale, const KamataEngine::Vector3& rotate, const KamataEngine::Vector3& translate) {
-	KamataEngine::Matrix4x4 translateMatrix = MakeTranslateMatrix(translate);
-	KamataEngine::Matrix4x4 scaleMatrix = MakeScaleMatrix(scale);
-	KamataEngine::Matrix4x4 rotateXMatrix = MakeRotateXMatrix(rotate.x);
-	KamataEngine::Matrix4x4 rotateYMatrix = MakeRotateYMatrix(rotate.y);
-	KamataEngine::Matrix4x4 rotateZMatrix = MakeRotateZMatrix(rotate.z);
-	KamataEngine::Matrix4x4 rotateXYZMatrix = Multiply(rotateXMatrix, Multiply(rotateYMatrix, rotateZMatrix));
-	KamataEngine::Matrix4x4 scaleRot = Multiply(scaleMatrix, rotateXYZMatrix);
-	KamataEngine::Matrix4x4 resultMatrix = Multiply(scaleRot, translateMatrix);
+Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate) {
+	Matrix4x4 translateMatrix = MakeTranslateMatrix(translate);
+	Matrix4x4 scaleMatrix = MakeScaleMatrix(scale);
+	Matrix4x4 rotateXMatrix = MakeRotateXMatrix(rotate.x);
+	Matrix4x4 rotateYMatrix = MakeRotateYMatrix(rotate.y);
+	Matrix4x4 rotateZMatrix = MakeRotateZMatrix(rotate.z);
+	Matrix4x4 rotateXYZMatrix = Multiply(rotateXMatrix, Multiply(rotateYMatrix, rotateZMatrix));
+	Matrix4x4 scaleRot = Multiply(scaleMatrix, rotateXYZMatrix);
+	Matrix4x4 resultMatrix = Multiply(scaleRot, translateMatrix);
 
 	return resultMatrix;
 }
+
+} // namespace KamataEngine

@@ -1,5 +1,5 @@
 #pragma once
-#include "KamataEngine.h"	
+#include "KamataEngine.h"
 #include <vector>
 
 class GameScene {
@@ -20,7 +20,7 @@ private:
 	KamataEngine::Model* model_ = nullptr;
 
 	// ワールドトランスフォーム
-	std::vector<WorldTransform*> worldTransformBlocks_;
+	std::vector<KamataEngine::WorldTransform*> worldTransformBlocks_;
 	// カメラ
 	KamataEngine::Camera camera_;
 
