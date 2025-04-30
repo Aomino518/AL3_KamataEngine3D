@@ -84,7 +84,15 @@ void GameScene::Update() {
 	if (isDebugCameraActive_) {
 		// デバッグカメラの更新
 		debugCamera_->Update();
-
+		camera_.matView = debugCamera_->GetCamera().matView;
+		camera_.matProjection = debugCamera_->GetCamera().matProjection;
+		// ビュープロジェクション行列の転送
+		camera_.TransferMatrix();
+	} 
+	else 
+	{
+		// ビュープロジェクション行列の更新と転送
+		camera_.UpdateMatrix();
 	}
 #endif _DEBUG
 }

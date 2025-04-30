@@ -1,6 +1,7 @@
 #pragma once
 #include "KamataEngine.h"
 #include <vector>
+#include "3d/DebugCamera.h"
 
 class GameScene {
 public:
@@ -30,7 +31,7 @@ private:
 	// デバッグカメラ有効
 	bool isDebugCameraActive_ = false;
 	// デバッグカメラ
-	DebugCamera* debugCamera_ = nullptr;
+	KamataEngine::DebugCamera* debugCamera_ = nullptr;
 #endif _DEBUG
 
 };

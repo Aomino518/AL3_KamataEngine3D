@@ -54,5 +54,4 @@ Matrix4x4 MakeScaleMatrix(const Vector3& scale);
 /// <param name="translate">平行移動行列</param>
 /// <returns></returns>
 Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate);
-
 }
