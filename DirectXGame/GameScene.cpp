@@ -1,10 +1,13 @@
 #include "GameScene.h"
 #include "Matrix.h"
 
-using namespace KamataEngine;
-
+namespace KamataEngine {
 GameScene::~GameScene() {
 	delete model_;
+	delete modelSkydome_;
+	delete modelPlayer_;
+	delete skydome_;
+	delete player_;
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
@@ -21,14 +24,14 @@ GameScene::~GameScene() {
 // 初期化
 void GameScene::Initialize() {
 	// 3Dモデルの生成
-	model_ = Model::Create();
+	model_ = Model::CreateFromOBJ("block", true);
 
 	// 要素数
 	const uint32_t kNumBlockVirtical = 10;
 	const uint32_t kNumBlockHorizontal = 20;
 	// ブロック1個分の横幅
-	const float kBlockWidth = 2.0f;
-	const float kBlockHeight = 2.0f;
+	const float kBlockWidth = 1.0f;
+	const float kBlockHeight = 1.0f;
 	// 要素数を変更する
 	worldTransformBlocks_.resize(kNumBlockHorizontal);
 
@@ -42,7 +45,7 @@ void GameScene::Initialize() {
 	// キューブの生成
 	for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
 		for (uint32_t j = 0; j < kNumBlockHorizontal; ++j) {
-			if ((i + j) % 2 == 0) {
+			if ((i + j) % 2 == 1) {
 				worldTransformBlocks_[i][j] = nullptr;
 				continue;
 			}
@@ -53,6 +56,20 @@ void GameScene::Initialize() {
 		}
 	}
 
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+
+	modelPlayer_ = Model::CreateFromOBJ("player", true);
+
+	// 天球の生成
+	skydome_ = new Skydome();
+	// 天球の初期化
+	skydome_->Initialize(modelSkydome_, &camera_);
+
+	// プレイヤー生成
+	player_ = new Player();
+	// プレイヤーの初期化
+	player_->Initialize(modelPlayer_, &camera_);
+
 	// カメラ
 	camera_.Initialize();
 
@@ -60,8 +77,6 @@ void GameScene::Initialize() {
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
 #endif _DEBUG
-
-	textureHandle_ = TextureManager::Load("cube/cube.jpg");
 }
 
 void GameScene::Update() {
@@ -70,11 +85,13 @@ void GameScene::Update() {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
 			if (!worldTransformBlock)
 				continue;
-			worldTransformBlock->matWorld_ = KamataEngine::MakeAffineMatrix(worldTransformBlock->scale_, worldTransformBlock->rotation_, worldTransformBlock->translation_);
+			worldTransformBlock->matWorld_ = MakeAffineMatrix(worldTransformBlock->scale_, worldTransformBlock->rotation_, worldTransformBlock->translation_);
 			// 定数バッファに転送する
 			worldTransformBlock->TransferMatrix();
 		}
 	}
+
+	player_->Update();
 
 #ifdef _DEBUG
 	if (Input::GetInstance()->TriggerKey(DIK_E)) {
@@ -88,9 +105,7 @@ void GameScene::Update() {
 		camera_.matProjection = debugCamera_->GetCamera().matProjection;
 		// ビュープロジェクション行列の転送
 		camera_.TransferMatrix();
-	} 
-	else 
-	{
+	} else {
 		// ビュープロジェクション行列の更新と転送
 		camera_.UpdateMatrix();
 	}
@@ -109,5 +124,10 @@ void GameScene::Draw() {
 			model_->Draw(*worldTransformBlock, camera_);
 		}
 	}
+
+	player_->Draw();
+	skydome_->Draw();
+
 	Model::PostDraw();
 }
+} // namespace KamataEngine

@@ -2,7 +2,10 @@
 #include "KamataEngine.h"
 #include <vector>
 #include "3d/DebugCamera.h"
+#include "Skydome.h"
+#include "Player.h"
 
+namespace KamataEngine {
 class GameScene {
 public:
 	~GameScene();
@@ -18,20 +21,28 @@ public:
 
 private:
 	// 3Dモデルデータ
-	KamataEngine::Model* model_ = nullptr;
+	Model* model_ = nullptr;
 
 	// ワールドトランスフォーム
-	std::vector<std::vector<KamataEngine::WorldTransform*>> worldTransformBlocks_;
+	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 	// カメラ
-	KamataEngine::Camera camera_;
+	Camera camera_;
 
-	uint32_t textureHandle_ = 0;
+	// 天球
+	Model* modelSkydome_ = nullptr;
+
+	// プレイヤー
+	Model* modelPlayer_ = nullptr;
+
+	Skydome* skydome_ = nullptr;
+
+	Player* player_ = nullptr;
 
 #ifdef _DEBUG
 	// デバッグカメラ有効
 	bool isDebugCameraActive_ = false;
 	// デバッグカメラ
-	KamataEngine::DebugCamera* debugCamera_ = nullptr;
+	DebugCamera* debugCamera_ = nullptr;
 #endif _DEBUG
-
 };
+} // namespace KamataEngine
