@@ -4,6 +4,7 @@
 #include "3d/DebugCamera.h"
 #include "Skydome.h"
 #include "Player.h"
+#include "MapChipField.h"
 
 namespace KamataEngine {
 class GameScene {
@@ -18,6 +19,8 @@ public:
 
 	// 描画
 	void Draw();
+
+	void GenerateBlocks();
 
 private:
 	// 3Dモデルデータ
@@ -37,6 +40,9 @@ private:
 	Skydome* skydome_ = nullptr;
 
 	Player* player_ = nullptr;
+
+	// マップチップフィールド
+	MapChipField* mapChipField_;
 
 #ifdef _DEBUG
 	// デバッグカメラ有効
