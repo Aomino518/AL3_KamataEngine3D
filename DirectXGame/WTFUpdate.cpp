@@ -6,9 +6,6 @@ namespace KamataEngine {
 void WtfUpdate(WorldTransform& worldTransform) {
 	// アフィン変換行列で計算
 	worldTransform.matWorld_ = MakeAffineMatrix(worldTransform.scale_, worldTransform.rotation_, worldTransform.translation_);
-	worldTransform.translation_.y = 1.0f;
-	worldTransform.translation_.x = 1.0f;
-	worldTransform.rotation_.y = 2.0f;
 	// 行列を定数バッファに転送
 	worldTransform.TransferMatrix();
 }

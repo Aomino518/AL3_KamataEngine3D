@@ -9,6 +9,14 @@ struct Vector3 final {
 	float x;
 	float y;
 	float z;
+
+	// 演算子オーバーロード: +=
+	Vector3& operator+=(const Vector3& other) {
+		this->x += other.x;
+		this->y += other.y;
+		this->z += other.z;
+		return *this;
+	}
 };
 
 } // namespace KamataEngine

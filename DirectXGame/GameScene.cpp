@@ -43,8 +43,12 @@ void GameScene::Initialize() {
 
 	// プレイヤー生成
 	player_ = new Player();
+
+	// 座標をマップチップ番号で指定
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(1, 18);
+
 	// プレイヤーの初期化
-	player_->Initialize(modelPlayer_, &camera_);
+	player_->Initialize(modelPlayer_, &camera_, playerPosition);
 
 	// カメラ
 	camera_.Initialize();
