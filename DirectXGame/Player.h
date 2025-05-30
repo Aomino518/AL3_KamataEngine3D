@@ -9,24 +9,6 @@ enum class LRDirection {
 
 namespace KamataEngine {
 class Player {
-public:
-	/// <summary>
-	/// 初期化
-	/// </summary>
-	/// <param name="model">モデル</param>
-	/// <param name="camera">カメラ</param>
-	void Initialize(Model* model, Camera* camera, const Vector3& position);
-
-	/// <summary>
-	/// 更新
-	/// </summary>
-	void Update();
-
-	/// <summary>
-	/// 描画
-	/// </summary>
-	void Draw();
-
 private:
 	// ワールド変換データ
 	WorldTransform worldTransform_;
@@ -56,5 +38,25 @@ private:
 	static inline const float kLimitFallSpeed = 0.3f;
 	// ジャンプ初速(上方向)
 	static inline const float kJumpAcceleration = 0.9f;
+
+public:
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <param name="model">モデル</param>
+	/// <param name="camera">カメラ</param>
+	void Initialize(Model* model, Camera* camera, const Vector3& position);
+
+	/// <summary>
+	/// 更新
+	/// </summary>
+	void Update();
+
+	/// <summary>
+	/// 描画
+	/// </summary>
+	void Draw();
+
+	WorldTransform& GetWorldTransform() { return worldTransform_; }
 };
 } // namespace KmataEngine

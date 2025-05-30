@@ -17,6 +17,9 @@ struct Vector3 final {
 		this->z += other.z;
 		return *this;
 	}
+
+	// 演算子オーバーロード: +
+	Vector3 operator+(const Vector3& other) const { return Vector3{this->x + other.x, this->y + other.y, this->z + other.z}; }
 };
 
 } // namespace KamataEngine

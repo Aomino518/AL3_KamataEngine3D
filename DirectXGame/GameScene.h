@@ -5,6 +5,7 @@
 #include "Skydome.h"
 #include "Player.h"
 #include "MapChipField.h"
+#include "CameraController.h"
 
 namespace KamataEngine {
 class GameScene {
@@ -43,6 +44,8 @@ private:
 
 	// マップチップフィールド
 	MapChipField* mapChipField_;
+
+	CameraController* cameraController_;
 
 #ifdef _DEBUG
 	// デバッグカメラ有効

@@ -9,6 +9,7 @@ GameScene::~GameScene() {
 	delete skydome_;
 	delete player_;
 	delete mapChipField_;
+	delete cameraController_;
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
@@ -53,6 +54,11 @@ void GameScene::Initialize() {
 	// カメラ
 	camera_.Initialize();
 
+	cameraController_ = new CameraController();
+	cameraController_->Initialize(&camera_);
+	cameraController_->SetTarget(player_);
+	cameraController_->Reset();
+
 #ifdef _DEBUG
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
@@ -72,6 +78,7 @@ void GameScene::Update() {
 	}
 
 	player_->Update();
+	cameraController_->Update();
 
 #ifdef _DEBUG
 	if (Input::GetInstance()->TriggerKey(DIK_E)) {
