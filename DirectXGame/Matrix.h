@@ -54,4 +54,14 @@ Matrix4x4 MakeScaleMatrix(const Vector3& scale);
 /// <param name="translate">平行移動行列</param>
 /// <returns></returns>
 Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate);
+
+/// <summary>
+/// 線形補間 (Linear Interpolation)
+/// </summary>
+/// <param name="start">開始値</param>
+/// <param name="end">終了値</param>
+/// <param name="t">補間係数 (0.0f ～ 1.0f)</param>
+/// <returns>補間結果</returns>
+Vector3 Lerp(const Vector3& start, const Vector3& end, float t);
+
 }

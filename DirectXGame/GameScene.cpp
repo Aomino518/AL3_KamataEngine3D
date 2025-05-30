@@ -59,6 +59,9 @@ void GameScene::Initialize() {
 	cameraController_->SetTarget(player_);
 	cameraController_->Reset();
 
+	CameraController::Rect cameraArea = {12.0f, 100.0f - 12.0f, 6.0f, 6.0f};
+	cameraController_->SetMovableArea(cameraArea);
+
 #ifdef _DEBUG
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);

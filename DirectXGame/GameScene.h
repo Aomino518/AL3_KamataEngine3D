@@ -45,7 +45,7 @@ private:
 	// マップチップフィールド
 	MapChipField* mapChipField_;
 
-	CameraController* cameraController_;
+	CameraController* cameraController_ = nullptr;
 
 #ifdef _DEBUG
 	// デバッグカメラ有効

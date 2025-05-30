@@ -146,4 +146,13 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Ve
 	return resultMatrix;
 }
 
+/// <summary>
+/// 線形補間 (Linear Interpolation)
+/// </summary>
+/// <param name="start">開始値</param>
+/// <param name="end">終了値</param>
+/// <param name="t">補間係数 (0.0f ～ 1.0f)</param>
+/// <returns>補間結果</returns>
+Vector3 Lerp(const Vector3& start, const Vector3& end, float t) { return start + (end - start) * t; }  
+
 } // namespace KamataEngine

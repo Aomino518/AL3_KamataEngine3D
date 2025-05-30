@@ -6,7 +6,7 @@
 #include <cassert>
 #include <numbers>
 
-namespace KamataEngine {
+using namespace KamataEngine;
 
 /// <summary>
 /// 初期化
@@ -139,5 +139,3 @@ void Player::Draw() {
 	// 3Dモデル描画
 	model_->Draw(worldTransform_, *camera_);
 }
-
-} // namespace KamataEngine

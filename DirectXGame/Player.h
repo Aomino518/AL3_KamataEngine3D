@@ -7,7 +7,7 @@ enum class LRDirection {
 	kLeft,
 };
 
-namespace KamataEngine {
+using namespace KamataEngine;
 class Player {
 private:
 	// ワールド変換データ
@@ -58,5 +58,6 @@ public:
 	void Draw();
 
 	WorldTransform& GetWorldTransform() { return worldTransform_; }
+
+	const Vector3& GetVelocity() const { return velocity_; }
 };
-} // namespace KmataEngine
