@@ -1,14 +1,51 @@
 #pragma once
 #include <KamataEngine.h>
 
-// 左右
-enum class LRDirection {
-	kRight,
-	kLeft,
-};
-
+// 前方宣言
+class MapChipField;
 using namespace KamataEngine;
+
 class Player {
+public:
+	// 左右
+	enum class LRDirection {
+		kRight,
+		kLeft,
+	};
+
+	enum Corner {
+		kRightBottom,
+		kLeftBottom,
+		kRightTop,
+		kLeftTop,
+		kNumCorner
+	};
+
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <param name="model">モデル</param>
+	/// <param name="camera">カメラ</param>
+	void Initialize(Model* model, Camera* camera, const Vector3& position);
+
+	/// <summary>
+	/// 更新
+	/// </summary>
+	void Update();
+
+	/// <summary>
+	/// 描画
+	/// </summary>
+	void Draw();
+
+	WorldTransform& GetWorldTransform() { return worldTransform_; }
+
+	const Vector3& GetVelocity() const { return velocity_; }
+
+	void SetMapChipField(MapChipField* mapChipField) { this->mapChipField_ = mapChipField; }
+
+	void InputMove();
+
 private:
 	// ワールド変換データ
 	WorldTransform worldTransform_;
@@ -38,26 +75,27 @@ private:
 	static inline const float kLimitFallSpeed = 0.3f;
 	// ジャンプ初速(上方向)
 	static inline const float kJumpAcceleration = 0.9f;
+	//　マップチップによるフィールド
+	MapChipField* mapChipField_ = nullptr;
 
-public:
-	/// <summary>
-	/// 初期化
-	/// </summary>
-	/// <param name="model">モデル</param>
-	/// <param name="camera">カメラ</param>
-	void Initialize(Model* model, Camera* camera, const Vector3& position);
+	// キャラクターの当たり判定サイズ
+	static inline const float kWidth = 0.8f;
+	static inline const float kHeight = 0.8f;
+	static inline const float kBlank = 0.04f;
 
-	/// <summary>
-	/// 更新
-	/// </summary>
-	void Update();
+	// マップとの当たり判定情報
+	struct CollisionMapInfo {
+		bool ceiling = false; // 天井衝突フラグ
+		bool landing = false; // 着地フラグ
+		bool hitWall = false; // 壁接触フラグ
+		Vector3 move; // 移動量
+	};
 
-	/// <summary>
-	/// 描画
-	/// </summary>
-	void Draw();
+	void CheckMapCollision(CollisionMapInfo& info);
+	void CheckMapCollisionUp(CollisionMapInfo& info);
+	void CheckMapCollisionDown(CollisionMapInfo& info);
+	void CheckMapCollisionRight(CollisionMapInfo& info);
+	void CheckMapCollisionLeft(CollisionMapInfo& info);
 
-	WorldTransform& GetWorldTransform() { return worldTransform_; }
-
-	const Vector3& GetVelocity() const { return velocity_; }
+	Vector3 CornerPosition(const Vector3& center, Corner corner);
 };
