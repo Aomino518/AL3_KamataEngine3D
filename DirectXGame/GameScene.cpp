@@ -71,6 +71,10 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
+	player_->Update();
+	skydome_->Update();
+	cameraController_->Update();
+
 	// ブロックの更新
 	for (const std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
@@ -82,8 +86,6 @@ void GameScene::Update() {
 		}
 	}
 
-	player_->Update();
-	cameraController_->Update();
 
 #ifdef _DEBUG
 	if (Input::GetInstance()->TriggerKey(DIK_E)) {

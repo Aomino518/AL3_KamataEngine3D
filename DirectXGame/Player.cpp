@@ -138,7 +138,7 @@ void Player::InputMove() {
 				}
 			}
 			// 加速 / 減速
-			velocity_.x += acceleration.x;
+			velocity_ += acceleration;
 
 			// 最大速度制限
 			velocity_.x = std::clamp(velocity_.x, -kLimitRunSpeed, kLimitRunSpeed);
@@ -171,14 +171,14 @@ void Player::CheckMapCollision(CollisionMapInfo& info) {
 }
 
 void Player::CheckMapCollisionUp(CollisionMapInfo& info) { 
-	std::array<Vector3, kNumCorner> positionNew; 
-	for (uint32_t i = 0; i < positionNew.size(); ++i) {
-		positionNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
-	}
-
 	// 上昇あり？
 	if (info.move.y <= 0) {
 		return;
+	}
+
+	std::array<Vector3, kNumCorner> positionNew; 
+	for (uint32_t i = 0; i < positionNew.size(); ++i) {
+		positionNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
 	}
 
 	MapChipType mapChipType;
@@ -201,13 +201,18 @@ void Player::CheckMapCollisionUp(CollisionMapInfo& info) {
 
 	// ブロックにヒット？
 	if (hit) {
-		// めり込みをを排除する方向に移動量を設定する
-		indexSet = mapChipField_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + info.move + Vector3(0 + kHeight / 2.0f, 0));
-		// めり込み先ブロックの範囲矩形
-		MapChipField::Rect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
-		info.move.y = std::max(0.0f, rect.bottom - worldTransform_.translation_.y - (kHeight / 2.0f + kBlank));
-		// 天井に当たったことを記録する
-		info.ceiling = true;
+		// 現在座標が壁の外か判定
+		MapChipField::IndexSet indexSetNow;
+		indexSetNow = mapChipField_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + Vector3(0, +kHeight / 2.0f, 0));
+		if (indexSetNow.yIndex != indexSet.yIndex) {
+			// めり込みをを排除する方向に移動量を設定する
+			indexSet = mapChipField_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + info.move + Vector3(0 + kHeight / 2.0f, 0));
+			// めり込み先ブロックの範囲矩形
+			MapChipField::Rect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
+			info.move.y = std::max(0.0f, rect.bottom - worldTransform_.translation_.y - (kHeight / 2.0f + kBlank));
+			// 天井に当たったことを記録する
+			info.ceiling = true;
+		}
 	
 	}
 
