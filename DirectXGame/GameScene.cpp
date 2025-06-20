@@ -1,5 +1,6 @@
 #include "GameScene.h"
 #include "Matrix.h"
+#include "WTFUpdate.h"
 
 namespace KamataEngine {
 GameScene::~GameScene() {
@@ -28,28 +29,23 @@ void GameScene::Initialize() {
 	// 3Dモデルの生成
 	model_ = Model::CreateFromOBJ("block", true);
 
-	mapChipField_ = new MapChipField();
-	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
-
-	GenerateBlocks();
-
-	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
-
-	modelPlayer_ = Model::CreateFromOBJ("player", true);
 
 	// 天球の生成
 	skydome_ = new Skydome();
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 	// 天球の初期化
 	skydome_->Initialize(modelSkydome_, &camera_);
 
+	mapChipField_ = new MapChipField();
+	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
+	GenerateBlocks();
+
 	// プレイヤー生成
 	player_ = new Player();
-
-	player_->SetMapChipField(mapChipField_);
-
+	modelPlayer_ = Model::CreateFromOBJ("player", true);
 	// 座標をマップチップ番号で指定
-	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(1, 18);
-
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 18);
+	player_->SetMapChipField(mapChipField_);
 	// プレイヤーの初期化
 	player_->Initialize(modelPlayer_, &camera_, playerPosition);
 
@@ -61,7 +57,7 @@ void GameScene::Initialize() {
 	cameraController_->SetTarget(player_);
 	cameraController_->Reset();
 
-	CameraController::Rect cameraArea = {12.0f, 100.0f - 12.0f, 6.0f, 6.0f};
+	CameraController::Rect cameraArea = {12.0f, 100 - 12.0f, 6.0f, 6.0f};
 	cameraController_->SetMovableArea(cameraArea);
 
 #ifdef _DEBUG
@@ -80,9 +76,8 @@ void GameScene::Update() {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
 			if (!worldTransformBlock)
 				continue;
-			worldTransformBlock->matWorld_ = MakeAffineMatrix(worldTransformBlock->scale_, worldTransformBlock->rotation_, worldTransformBlock->translation_);
 			// 定数バッファに転送する
-			worldTransformBlock->TransferMatrix();
+			WtfUpdate(*worldTransformBlock);
 		}
 	}
 
@@ -127,11 +122,11 @@ void GameScene::Draw() {
 
 void GameScene::GenerateBlocks() {
 	// 要素数
-	const uint32_t kNumBlockVirtical = mapChipField_->GetNumBlockVirtical();
-	const uint32_t kNumBlockHorizontal = mapChipField_->GetNumBlockHorizontal();
+	uint32_t kNumBlockVirtical = mapChipField_->GetNumBlockVirtical();
+	uint32_t kNumBlockHorizontal = mapChipField_->GetNumBlockHorizontal();
 	
 	// 要素数を変更する
-	worldTransformBlocks_.resize(kNumBlockHorizontal);
+	//worldTransformBlocks_.resize(kNumBlockHorizontal);
 
 	// 列数を設定 (縦方向のブロック数)
 	worldTransformBlocks_.resize(kNumBlockVirtical);

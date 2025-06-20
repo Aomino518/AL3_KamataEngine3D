@@ -19,7 +19,6 @@ void Player::Initialize(Model* model, Camera* camera, const Vector3& position) {
 	worldTransform_.translation_ = position;
 	worldTransform_.rotation_.y = std::numbers::pi_v<float> / 2.0f;
 	camera_ = camera;
-	worldTransform_.rotation_.y = 2.0f;
 }
 
 /// <summary>
@@ -34,18 +33,19 @@ void Player::Update() {
 	CollisionMapInfo collisionMapInfo;
 	// 移動量に速度の値をコピー
 	collisionMapInfo.move = velocity_;
-	collisionMapInfo.landing = false;
-	collisionMapInfo.hitWall = false;
+	//collisionMapInfo.landing = false;
+	//collisionMapInfo.hitWall = false;
 
 	// マップ衝突チェック
 	CheckMapCollision(collisionMapInfo);
 
-	worldTransform_.translation_ += velocity_;
+	//worldTransform_.translation_ += velocity_;
 
 	worldTransform_.translation_ += collisionMapInfo.move;
 
 	// 天井接触による落下開始
 	if (collisionMapInfo.ceiling) {
+		DebugText::GetInstance()->ConsolePrintf("hit ceiling\n");
 		velocity_.y = 0;
 	}
 
@@ -113,7 +113,7 @@ void Player::InputMove() {
 					// 速度と逆方向に入力中は球ブレーキ
 					velocity_.x *= (1.0f - kAttenuation);
 				}
-				acceleration.x += kAcceleration;
+				acceleration.x += kAcceleration / 60.0f;
 
 				if (lrDirection_ != LRDirection::kRight) {
 					lrDirection_ = LRDirection::kRight;
@@ -127,7 +127,7 @@ void Player::InputMove() {
 					// 速度と逆方向に入力中は球ブレーキ
 					velocity_.x *= (1.0f - kAttenuation);
 				}
-				acceleration.x -= kAcceleration;
+				acceleration.x -= kAcceleration / 60.0f;
 
 				if (lrDirection_ != LRDirection::kLeft) {
 					lrDirection_ = LRDirection::kLeft;
@@ -150,13 +150,13 @@ void Player::InputMove() {
 
 		if (Input::GetInstance()->PushKey(DIK_UP)) {
 			// ジャンプ初速
-			velocity_ += Vector3(0, kJumpAcceleration, 0);
+			velocity_ += Vector3(0, kJumpAcceleration / 60.0f, 0);
 		}
 
 		// 空中
 	} else {
 		// 落下速度
-		velocity_ += Vector3(0, -kGravityAcceleration, 0);
+		velocity_ += Vector3(0, -kGravityAcceleration / 60.0f, 0);
 		// 落下速度制限
 		velocity_.y = std::max(velocity_.y, -kLimitFallSpeed);
 	}
@@ -206,14 +206,16 @@ void Player::CheckMapCollisionUp(CollisionMapInfo& info) {
 		indexSetNow = mapChipField_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + Vector3(0, +kHeight / 2.0f, 0));
 		if (indexSetNow.yIndex != indexSet.yIndex) {
 			// めり込みをを排除する方向に移動量を設定する
-			indexSet = mapChipField_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + info.move + Vector3(0 + kHeight / 2.0f, 0));
+			indexSet = mapChipField_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + info.move + Vector3(0, +kHeight / 2.0f, 0));
 			// めり込み先ブロックの範囲矩形
 			MapChipField::Rect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
 			info.move.y = std::max(0.0f, rect.bottom - worldTransform_.translation_.y - (kHeight / 2.0f + kBlank));
 			// 天井に当たったことを記録する
 			info.ceiling = true;
+			DebugText::GetInstance()->ConsolePrintf(
+			    "rect.bottom: %f, playerY: %f, kHeight: %f, kBlank: %f, result: %f\n", rect.bottom, worldTransform_.translation_.y, kHeight, kBlank,
+			    rect.bottom - worldTransform_.translation_.y - (kHeight / 2.0f + kBlank));
 		}
-	
 	}
 
 }
