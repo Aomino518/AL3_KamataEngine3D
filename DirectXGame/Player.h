@@ -56,8 +56,8 @@ private:
 	// playerの速度
 	Vector3 velocity_ = {};
 	static inline const float kAcceleration = 0.1f;
-	static inline const float kAttenuation = 0.03f;
-	static inline const float kLimitRunSpeed = 0.4f;
+	static inline const float kAttenuation = 0.05f;
+	static inline const float kLimitRunSpeed = 0.3f;
 
 	LRDirection lrDirection_ = LRDirection::kRight;
 
@@ -98,4 +98,11 @@ private:
 	void CheckMapCollisionLeft(CollisionMapInfo& info);
 
 	Vector3 CornerPosition(const Vector3& center, Corner corner);
+	// 接地状態の切り替え処理
+	void UpdateOnGround(const CollisionMapInfo& info);
+	void UpdateOnWall(const CollisionMapInfo& info);
+
+    static inline const float kAttenuationLanding = 0.1f;
+    static inline const float kGroundSearchHeight = 0.1f;
+	static inline const float kAttenuationWall = 0.1f;
 };
