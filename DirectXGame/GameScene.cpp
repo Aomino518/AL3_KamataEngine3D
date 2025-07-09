@@ -11,6 +11,7 @@ GameScene::~GameScene() {
 	delete player_;
 	delete mapChipField_;
 	delete cameraController_;
+	delete enemy_;
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
@@ -60,6 +61,11 @@ void GameScene::Initialize() {
 	CameraController::Rect cameraArea = {12.0f, 100 - 12.0f, 6.0f, 6.0f};
 	cameraController_->SetMovableArea(cameraArea);
 
+	enemy_ = new Enemy();
+	modelEnemy_ = Model::CreateFromOBJ("enemy", true);
+	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(14, 18);
+	enemy_->Initialize(modelEnemy_, &camera_, enemyPosition);
+
 #ifdef _DEBUG
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
@@ -70,6 +76,7 @@ void GameScene::Update() {
 	player_->Update();
 	skydome_->Update();
 	cameraController_->Update();
+	enemy_->Update();
 
 	// ブロックの更新
 	for (const std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
@@ -116,6 +123,7 @@ void GameScene::Draw() {
 
 	player_->Draw();
 	skydome_->Draw();
+	enemy_->Draw();
 
 	Model::PostDraw();
 }

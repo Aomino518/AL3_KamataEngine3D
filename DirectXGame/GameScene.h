@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "MapChipField.h"
 #include "CameraController.h"
+#include "Enemy.h"
 
 namespace KamataEngine {
 class GameScene {
@@ -38,9 +39,13 @@ private:
 	// プレイヤー
 	Model* modelPlayer_ = nullptr;
 
+	Model* modelEnemy_ = nullptr;
+
 	Skydome* skydome_ = nullptr;
 
 	Player* player_ = nullptr;
+
+	Enemy* enemy_ = nullptr;
 
 	// マップチップフィールド
 	MapChipField* mapChipField_;
