@@ -1,8 +1,10 @@
 #pragma once
 #include <KamataEngine.h>
+#include "Matrix.h"
 
 // 前方宣言
 class MapChipField;
+class Enemy;
 using namespace KamataEngine;
 
 class Player {
@@ -45,6 +47,14 @@ public:
 	void SetMapChipField(MapChipField* mapChipField) { mapChipField_ = mapChipField; }
 
 	void InputMove();
+
+	Vector3 GetWorldPosition();
+
+	// AABBを取得
+	AABB GetAABB();
+
+	// 衝突応答
+	void OnCollision(const Enemy* enemy);
 
 private:
 	// ワールド変換データ

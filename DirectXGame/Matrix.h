@@ -3,6 +3,11 @@
 
 namespace KamataEngine {
 
+struct AABB {
+	Vector3 min;
+	Vector3 max;
+};
+
 // <summary>
 /// X軸回転行列関数
 /// </summary>
@@ -63,5 +68,7 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Ve
 /// <param name="t">補間係数 (0.0f ～ 1.0f)</param>
 /// <returns>補間結果</returns>
 Vector3 Lerp(const Vector3& start, const Vector3& end, float t);
+
+bool IsCollision(const AABB& aabb1, const AABB& aabb2);
 
 }

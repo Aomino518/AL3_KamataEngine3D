@@ -7,6 +7,7 @@
 #include "MapChipField.h"
 #include "CameraController.h"
 #include "Enemy.h"
+#include "Matrix.h"
 
 namespace KamataEngine {
 class GameScene {
@@ -23,6 +24,9 @@ public:
 	void Draw();
 
 	void GenerateBlocks();
+
+	// 全ての当たり判定を行う
+	void CheckAllCollisions();
 
 private:
 	// 3Dモデルデータ
@@ -45,7 +49,9 @@ private:
 
 	Player* player_ = nullptr;
 
-	Enemy* enemy_ = nullptr;
+	//Enemy* enemy_ = nullptr;
+
+	std::list<Enemy*> enemies_;
 
 	// マップチップフィールド
 	MapChipField* mapChipField_;

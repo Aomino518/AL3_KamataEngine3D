@@ -1,7 +1,10 @@
 #pragma once
 #include <KamataEngine.h>
+#include "Matrix.h"
 
 using namespace KamataEngine;
+
+class Player;
 
 /// <summary>
 /// 敵
@@ -13,6 +16,13 @@ public:
 	void Update();
 
 	void Draw();
+
+	Vector3 GetWorldPosition();
+
+	AABB GetAABB();
+
+	// 衝突応答
+	void OnCollision(const Player* player);
 
 private:
 	WorldTransform worldTransform_;
@@ -32,4 +42,7 @@ private:
 	static inline const float kWalkMotionTime = 1.0f;
 
 	float walkTimer = 0.0f;
+
+	static inline const float kWidth = 0.8f;
+	static inline const float kHeight = 0.8f;
 };
