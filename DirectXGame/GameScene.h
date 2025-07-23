@@ -8,6 +8,7 @@
 #include "CameraController.h"
 #include "Enemy.h"
 #include "Matrix.h"
+#include "DethParticles.h"
 
 namespace KamataEngine {
 class GameScene {
@@ -45,6 +46,8 @@ private:
 
 	Model* modelEnemy_ = nullptr;
 
+	Model* dethParticles_model_ = nullptr;
+
 	Skydome* skydome_ = nullptr;
 
 	Player* player_ = nullptr;
@@ -57,6 +60,8 @@ private:
 	MapChipField* mapChipField_;
 
 	CameraController* cameraController_ = nullptr;
+
+	DethParticles* dethParticles_ = nullptr;
 
 #ifdef _DEBUG
 	// デバッグカメラ有効

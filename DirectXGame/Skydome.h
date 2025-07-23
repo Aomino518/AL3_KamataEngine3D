@@ -7,6 +7,8 @@
 namespace KamataEngine {
 class Skydome {
 public:
+	//~Skydome();
+
 	/// <summary>
 	/// 初期化
 	/// </summary>

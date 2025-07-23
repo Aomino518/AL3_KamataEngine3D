@@ -22,6 +22,9 @@ GameScene::~GameScene() {
 	}
 	worldTransformBlocks_.clear();
 
+	delete dethParticles_;
+	delete dethParticles_model_;
+
 #ifdef DEBUG_
 	delete debugCamera_;
 #endif DEBUG_
@@ -75,6 +78,12 @@ void GameScene::Initialize() {
 		enemies_.push_back(newEnemy);
 	}
 
+	dethParticles_model_ = Model::CreateFromOBJ("deathParticle");
+
+	// 仮の生成処理
+	dethParticles_ = new DethParticles;
+	dethParticles_->Initialize(dethParticles_model_, &camera_, playerPosition);
+
 #ifdef _DEBUG
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
@@ -118,6 +127,10 @@ void GameScene::Update() {
 #endif _DEBUG
 
 	CheckAllCollisions();
+
+	if (dethParticles_) {
+		dethParticles_->Update();
+	}
 }
 
 // 描画
@@ -137,6 +150,10 @@ void GameScene::Draw() {
 	skydome_->Draw();
 	for (Enemy* enemy : enemies_) {
 		enemy->Draw();
+	}
+
+	if (dethParticles_) {
+		dethParticles_->Draw();
 	}
 
 	Model::PostDraw();
