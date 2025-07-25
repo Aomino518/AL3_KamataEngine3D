@@ -81,8 +81,11 @@ void GameScene::Initialize() {
 	dethParticles_model_ = Model::CreateFromOBJ("deathParticle");
 
 	// 仮の生成処理
-	dethParticles_ = new DethParticles;
-	dethParticles_->Initialize(dethParticles_model_, &camera_, playerPosition);
+	//dethParticles_ = new DethParticles;
+	//dethParticles_->Initialize(dethParticles_model_, &camera_, playerPosition);
+
+	// ゲームプレイフェーズから開始
+	phase_ = Phase::kPlay;
 
 #ifdef _DEBUG
 	// デバッグカメラの生成
@@ -91,6 +94,26 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
+	switch (phase_) { 
+		case Phase::kPlay:
+		if (player_->IsDead()) {
+			// 死亡演出フェーズに切り替え
+			phase_ = Phase::kDeath;
+			// 自キャラの座標を取得
+			const Vector3& deathParticlesPosition = player_->GetWorldPosition();
+			dethParticles_ = new DethParticles;
+			dethParticles_->Initialize(dethParticles_model_, &camera_, deathParticlesPosition);
+		}
+
+			break;
+	    case Phase::kDeath:
+		    if (dethParticles_ && dethParticles_->GetIsFinished()) {
+			    finished_ = true;
+		    }
+
+		    break;
+	}
+
 	player_->Update();
 	skydome_->Update();
 	cameraController_->Update();
@@ -146,7 +169,10 @@ void GameScene::Draw() {
 		}
 	}
 
-	player_->Draw();
+	if (!player_->IsDead()) {
+		player_->Draw();
+	}
+
 	skydome_->Draw();
 	for (Enemy* enemy : enemies_) {
 		enemy->Draw();
@@ -208,6 +234,25 @@ void GameScene::CheckAllCollisions() {
 		}
 	}
 	#pragma endregion
+}
+
+void GameScene::ChangePhase() {
+	switch (phase_) {
+	case Phase::kPlay:
+		if (player_->IsDead()) {
+			// 死亡演出
+			phase_ = Phase::kDeath;
+
+			const Vector3& deathParticlesPosition = player_->GetWorldPosition();
+
+			dethParticles_ = new DethParticles;
+			dethParticles_->Initialize(dethParticles_model_, &camera_, deathParticlesPosition);
+		}
+		break;
+	case Phase::kDeath:
+		break;
+	}
+
 }
 
 } // namespace KamataEngine

@@ -56,6 +56,9 @@ public:
 	// 衝突応答
 	void OnCollision(const Enemy* enemy);
 
+	// デスフラグのgetter
+	bool IsDead() const { return isDead_; }
+
 private:
 	// ワールド変換データ
 	WorldTransform worldTransform_;
@@ -115,4 +118,7 @@ private:
     static inline const float kAttenuationLanding = 0.1f;
     static inline const float kGroundSearchHeight = 0.1f;
 	static inline const float kAttenuationWall = 0.1f;
+
+	// デスフラグ
+	bool isDead_ = false;
 };

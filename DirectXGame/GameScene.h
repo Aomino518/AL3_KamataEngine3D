@@ -29,7 +29,20 @@ public:
 	// 全ての当たり判定を行う
 	void CheckAllCollisions();
 
+	void ChangePhase();
+
+	bool IsFinished() const { return finished_; }
+
 private:
+	// ゲームのフェーズ (型)
+	enum class Phase {
+		kPlay, // ゲームプレイ
+		kDeath, // デス演出
+	};
+
+	// ゲーム現在フェーズ
+	Phase phase_;
+
 	// 3Dモデルデータ
 	Model* model_ = nullptr;
 
@@ -62,6 +75,8 @@ private:
 	CameraController* cameraController_ = nullptr;
 
 	DethParticles* dethParticles_ = nullptr;
+
+	bool finished_ = false;
 
 #ifdef _DEBUG
 	// デバッグカメラ有効
