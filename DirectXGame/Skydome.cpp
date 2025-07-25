@@ -2,10 +2,6 @@
 #include <cassert>
 
 namespace KamataEngine {
-/* Skydome::~Skydome() { 
-	delete model_;
-	delete camera_;
-}*/
 
 /// <summary>
 /// 初期化

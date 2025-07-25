@@ -69,6 +69,8 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Ve
 /// <returns>補間結果</returns>
 Vector3 Lerp(const Vector3& start, const Vector3& end, float t);
 
+Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix);
+
 bool IsCollision(const AABB& aabb1, const AABB& aabb2);
 
 }
