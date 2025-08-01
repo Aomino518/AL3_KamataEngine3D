@@ -9,10 +9,12 @@
 #include "Enemy.h"
 #include "Matrix.h"
 #include "DethParticles.h"
+#include "Fade.h"
 
 namespace KamataEngine {
 class GameScene {
 public:
+
 	~GameScene();
 
 	// 初期化
@@ -36,8 +38,10 @@ public:
 private:
 	// ゲームのフェーズ (型)
 	enum class Phase {
+		kFadeIn,
 		kPlay, // ゲームプレイ
 		kDeath, // デス演出
+		kFadeOut,
 	};
 
 	// ゲーム現在フェーズ
@@ -77,6 +81,8 @@ private:
 	DethParticles* dethParticles_ = nullptr;
 
 	bool finished_ = false;
+
+	Fade* fade_ = nullptr;
 
 #ifdef _DEBUG
 	// デバッグカメラ有効
