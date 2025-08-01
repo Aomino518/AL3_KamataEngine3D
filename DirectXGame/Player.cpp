@@ -26,44 +26,7 @@ void Player::Initialize(Model* model, Camera* camera, const Vector3& position) {
 /// </summary>
 void Player::Update() {
 
-	// 移動入力
-	InputMove();
-
-	// 衝突情報を初期化
-	CollisionMapInfo collisionMapInfo;
-	// 移動量に速度の値をコピー
-	collisionMapInfo.move = velocity_;
-	collisionMapInfo.landing = false;
-	collisionMapInfo.hitWall = false;
-
-	// マップ衝突チェック
-	CheckMapCollision(collisionMapInfo);
-
-	//worldTransform_.translation_ += velocity_;
-
-	worldTransform_.translation_ += collisionMapInfo.move;
-
-	// 天井接触による落下開始
-	if (collisionMapInfo.ceiling) {
-		DebugText::GetInstance()->ConsolePrintf("hit ceiling\n");
-		velocity_.y = 0;
-	}
-	UpdateOnWall(collisionMapInfo);
-	UpdateOnGround(collisionMapInfo);
-
-	// 旋回制御
-	if (turnTimer_ > 0.0f) {
-		turnTimer_ -= static_cast<float>(1) / 60;
-		float time_ = 1.0f - (turnTimer_ / kTimeTurn);
-
-		// 左右の自キャラ角度テーブル
-		float destinationRotationYTable[] = {std::numbers::pi_v<float> / 2.0f, std::numbers::pi_v<float> * 3.0f / 2.0f};
-
-		// 状態応じた角度を取得する
-		float destinationRotationY = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
-		// 自キャラの角度を設定する
-		worldTransform_.rotation_.y = turnFirstRotationY_ + (destinationRotationY - turnFirstRotationY_) * time_;
-	}
+	BehaviorRootUpdate();
 
 	// 行列の更新
 	WtfUpdate(worldTransform_);
@@ -165,6 +128,65 @@ void Player::OnCollision(const Enemy* enemy) {
 	(void)enemy;
 
 	isDead_ = true;
+}
+
+void Player::BehaviorRootUpdate() { 
+	// 移動処理
+	InputMove();
+
+	// 衝突情報を初期化
+	CollisionMapInfo collisionMapInfo = {};
+	collisionMapInfo.move = velocity_;
+	collisionMapInfo.landing = false;
+	collisionMapInfo.hitWall = false;
+
+	// マップ衝突チェック
+	CheckMapCollision(collisionMapInfo);
+
+	worldTransform_.translation_ += collisionMapInfo.move;
+
+	// 天井接触による落下開始
+	if (collisionMapInfo.ceiling) {
+		velocity_.y = 0;
+	}
+
+	// 壁との接触判定
+	UpdateOnWall(collisionMapInfo);
+
+	// 接地判定
+	UpdateOnGround(collisionMapInfo);
+
+	// 旋回制御
+	if (turnTimer_ > 0.0f) {
+		turnTimer_ -= static_cast<float>(1) / 60;
+		float time_ = 1.0f - (turnTimer_ / kTimeTurn);
+
+		// 左右の自キャラ角度テーブル
+		float destinationRotationYTable[] = {std::numbers::pi_v<float> / 2.0f, std::numbers::pi_v<float> * 3.0f / 2.0f};
+
+		// 状態応じた角度を取得する
+		float destinationRotationY = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
+		// 自キャラの角度を設定する
+		worldTransform_.rotation_.y = turnFirstRotationY_ + (destinationRotationY - turnFirstRotationY_) * time_;
+	}
+
+}
+
+void Player::BehaviorAttackUpdate() { 
+	if (behaviorRequest_ != Behavior::kUnknown) {
+		// 振る舞いを変更する
+		behavior_ = behaviorRequest_;
+		// 各振る舞いごとの初期化を実装
+		switch (behavior_) { 
+		case Behavior::kRoot:
+		default:
+			break;
+		case Behavior::kAttack:
+			break;
+		}
+		// 振る舞いリクエストをリセット
+		behaviorRequest_ = Behavior::kUnknown;
+	}
 }
 
 void Player::CheckMapCollision(CollisionMapInfo& info) { 

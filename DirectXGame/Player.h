@@ -23,6 +23,13 @@ public:
 		kNumCorner
 	};
 
+	// 振る舞い
+	enum class Behavior { 
+		kRoot, // 通常状態
+		kAttack, // 攻撃中
+		kUnknown,
+	};
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -58,6 +65,12 @@ public:
 
 	// デスフラグのgetter
 	bool IsDead() const { return isDead_; }
+
+	// 通常行動更新
+	void BehaviorRootUpdate();
+
+	// 攻撃行動更新
+	void BehaviorAttackUpdate();
 
 private:
 	// ワールド変換データ
@@ -121,4 +134,10 @@ private:
 
 	// デスフラグ
 	bool isDead_ = false;
+
+	// 振る舞い
+	Behavior behavior_ = Behavior::kRoot;
+
+	// 次の振る舞いをリクエスト
+	Behavior behaviorRequest_ = Behavior::kUnknown;
 };
