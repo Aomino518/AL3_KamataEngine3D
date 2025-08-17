@@ -26,38 +26,6 @@ void Player::Update() {
 	// 移動
 	InputMove();
 
-	// 着地フラグ
-	bool landing = false;
-
-	// 地面との当たり判定
-	// 下降中か
-	if (velocity_.y < 0.0f) {
-		if (worldTransform_.translation_.y <= 2.0f) {
-			landing = true;
-		}
-	}
-
-	// 設置判定
-	if (onGround_) {
-		// ジャンプ開始
-		if (velocity_.y > 0.0f) {
-			// 空中状態へ移行
-			onGround_ = false;
-		}
-	} else {
-		// 着地
-		if (landing) {
-			// めり込み排斥
-			worldTransform_.translation_.y = 2.0f;
-			// 摩擦で横方向速度が減衰する
-			velocity_.x *= (1.0f - kAttenuation);
-			// 下方向速度をリセット
-			velocity_.y = 0.0f;
-			// 接地状態に移行
-			onGround_ = true;
-		}
-	}
-
 	// 行列の更新
 	WtfUpdate(worldTransform_);
 }
@@ -73,6 +41,17 @@ void Player::Draw() {
 }
 
 void Player::InputMove() {
+	// 着地フラグ
+	bool landing = false;
+
+	// 地面との当たり判定
+	// 下降中か
+	if (velocity_.y < 0.0f) {
+		if (worldTransform_.translation_.y <= 2.0f) {
+			landing = true;
+		}
+	}
+
 	// 接地状態
 	if (onGround_) {
 		if (Input::GetInstance()->PushKey(DIK_D) || Input::GetInstance()->PushKey(DIK_A)) {
@@ -103,6 +82,12 @@ void Player::InputMove() {
 			// ジャンプ初速
 			velocity_ += Vector3(0, kJumpAcceleration / 15.0f, 0);
 		}
+
+		// ジャンプ開始
+		if (velocity_.y > 0.0f) {
+			// 空中状態へ移行
+			onGround_ = false;
+		}
 		// 空中にいるとき
 	} else {
 		if (Input::GetInstance()->PushKey(DIK_D) || Input::GetInstance()->PushKey(DIK_A)) {
@@ -130,13 +115,26 @@ void Player::InputMove() {
 		}
 
 		if (!onGround_ && !Input::GetInstance()->PushKey(DIK_SPACE)) {
-			velocity_.y = -kJumpAcceleration / 30.0f;
+			// ジャンプ初速
+			velocity_ += Vector3(0, -kGravityAcceleration / 40.0f, 0);
 		}
 
 		// 落下速度
 		velocity_ += Vector3(0, -kGravityAcceleration / 40.0f, 0);
 		// 落下速度制限
 		velocity_.y = std::max(velocity_.y, -kLimitFallSpeed);
+
+		// 着地
+		if (landing) {
+			// めり込み排斥
+			worldTransform_.translation_.y = 2.0f;
+			// 摩擦で横方向速度が減衰する
+			velocity_.x *= (1.0f - kAttenuation);
+			// 下方向速度をリセット
+			velocity_.y = 0.0f;
+			// 接地状態に移行
+			onGround_ = true;
+		}
 	}
 
 	// 移動

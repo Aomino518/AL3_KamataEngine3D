@@ -29,8 +29,6 @@ public:
 	/// </summary>
 	void InputMove();
 
-	void InputKey();
-
 	KamataEngine::WorldTransform& Transform() { return worldTransform_; }
 	const KamataEngine::WorldTransform& Transform() const { return worldTransform_; }
 
@@ -56,7 +54,5 @@ private:
 	// 最大落下速度(下方向)
 	static inline const float kLimitFallSpeed = 0.5f;
 	// ジャンプ方向(上方向)
-	static inline const float kJumpAcceleration = 10.0f;
-	//int jumpBoostFrames_ = 0;
-	//int kJumpBoostMaxFrames_ = 60;
+	static inline const float kJumpAcceleration = 12.0f;
 };
