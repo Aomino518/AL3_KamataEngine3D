@@ -262,6 +262,13 @@ Vector3 operator*(const Vector3& v1, const Vector3& v2) { return {v1.x * v2.x, v
 
 Vector3 operator*(float s, const Vector3& v) { return Multiply(s, v); }
 
+Vector3& operator+=(Vector3& v1, const Vector3& v2) {
+	v1.x += v2.x;
+	v1.y += v2.y;
+	v1.z += v2.z;
+	return v1;
+}
+
 Vector3 operator*(const Vector3& v, float s) { return {s * v}; }
 
 Vector3 operator/(const Vector3& v, float s) { return Multiply(1.0f / s, v); }
@@ -271,5 +278,14 @@ Matrix4x4 operator+(const Matrix4x4& m1, const Matrix4x4& m2) { return Add(m1, m
 Matrix4x4 operator-(const Matrix4x4& m1, const Matrix4x4& m2) { return Subtract(m1, m2); }
 
 Matrix4x4 operator*(const Matrix4x4& m1, const Matrix4x4& m2) { return Multiply(m1, m2); }
+
+void WtfUpdate(WorldTransform& worldTransform) {
+
+	Matrix4x4 affin_mat = MakeAffineMatrix(worldTransform.scale_, worldTransform.rotation_, worldTransform.translation_);
+	// アフィン変換行列で計算
+	worldTransform.matWorld_ = affin_mat;
+	// 行列を定数バッファに転送
+	worldTransform.TransferMatrix();
+}
 
 } // namespace KamataEngine
