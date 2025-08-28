@@ -106,11 +106,23 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CameraController.cpp" />
+    <ClCompile Include="ClearScene.cpp" />
+    <ClCompile Include="DethParticles.cpp" />
+    <ClCompile Include="Dome.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyDethFx.cpp" />
+    <ClCompile Include="Fade.cpp" />
+    <ClCompile Include="GameOverScene.cpp" />
     <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="Goal.cpp" />
+    <ClCompile Include="Ground.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapChipField.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\TerrainPS.hlsl">
@@ -188,10 +200,22 @@
     <None Include="Resources\shaders\Sprite.hlsli" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CameraController.h" />
+    <ClInclude Include="ClearScene.h" />
+    <ClInclude Include="DethParticles.h" />
+    <ClInclude Include="Dome.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyDethFx.h" />
+    <ClInclude Include="Fade.h" />
+    <ClInclude Include="GameOverScene.h" />
     <ClInclude Include="GameScene.h" />
+    <ClInclude Include="Goal.h" />
+    <ClInclude Include="Ground.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="MapChipField.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="TitleScene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -25,6 +25,14 @@ public:
 		uint32_t yIndex;
 	};
 
+	// 範囲矩形
+	struct Rect {
+		float left;
+		float right;
+		float bottom;
+		float top;
+	};
+
 	/// <summary>
 	/// マップチップデータリセット関数
 	/// </summary>
@@ -58,13 +66,15 @@ public:
 
 	IndexSet GetMapChipIndexSetByPosition(const Vector3& position);
 
+	MapChipField::Rect GetRectByIndex(uint32_t xIndex, uint32_t yIndex);
+
 private:
 	// 1ブロックのサイズ
 	static inline const float kBlockWidth = 2.0f;
 	static inline const float kBlockHeight = 2.0f;
 	// ブロックの個数
-	static inline const uint32_t kNumBlockVirtical = 16;
-	static inline const uint32_t kNumBlockHorizontal = 16;
+	static inline const uint32_t kNumBlockVirtical = 48;
+	static inline const uint32_t kNumBlockHorizontal = 26;
 
 	MapChipData mapChipData_;
 };

@@ -1,0 +1,28 @@
+#pragma once
+#include <KamataEngine.h>
+
+class Ground {
+public:
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	void Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera);
+
+	/// <summary>
+	/// 更新
+	/// </summary>
+	void Update();
+
+	/// <summary>
+	/// 描画
+	/// </summary>
+	void Draw();
+
+private:
+	// ワールド変換データ
+	KamataEngine::WorldTransform worldTransform_;
+	// モデルデータ
+	KamataEngine::Model* model_ = nullptr;
+	// カメラ
+	KamataEngine::Camera* camera_ = nullptr;
+};
